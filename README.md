@@ -1,13 +1,13 @@
 
-# react-native-prevent-screenshoter
+# react-native-screenshot-prevent
 
 ## Getting started
 
-`$ npm install react-native-prevent-screenshoter --save`
+`$ npm install react-native-screenshot-prevent --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-prevent-screenshoter`
+`$ react-native link react-native-screenshot-prevent`
 
 ### Manual installation
 
@@ -15,7 +15,7 @@
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-prevent-screenshoter` and add `RNPreventScreenshot.xcodeproj`
+2. Go to `node_modules` ➜ `react-native-screenshot-prevent` and add `RNPreventScreenshot.xcodeproj`
 3. In XCode, in the project navigator, select your project. Add `libRNPreventScreenshot.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
@@ -26,19 +26,19 @@
   - Add `new RNPreventScreenshotPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
-  	include ':react-native-prevent-screenshoter'
-  	project(':react-native-prevent-screenshoter').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-prevent-screenshoter/android')
+  	include ':react-native-screenshot-prevent'
+  	project(':react-native-screenshot-prevent').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-screenshot-prevent/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-prevent-screenshoter')
+      compile project(':react-native-screenshot-prevent')
   	```
 
 
 
 ## Usage
 ```javascript
-import RNPreventScreenshot from 'react-native-prevent-screenshoter';
+import RNPreventScreenshot from 'react-native-screenshot-prevent';
 
 RNPreventScreenshot.enabled(true/false);
 ```
