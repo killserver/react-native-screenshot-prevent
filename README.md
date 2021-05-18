@@ -5,6 +5,8 @@
 
 `$ npm install react-native-screenshot-prevent --save`
 
+## fork: https://github.com/suehok/react-native-prevent-screenshot
+
 ### Mostly automatic installation
 
 `$ react-native link react-native-screenshot-prevent`
