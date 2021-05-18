@@ -26,14 +26,14 @@ public class RNPreventScreenshotModule extends ReactContextBaseJavaModule {
   public void enabled(boolean _enable) {
     if (_enable) {
       this.reactContext.getCurrentActivity().runOnUiThread(new Runnable() {
-        @override
+        @Override
         public void run() {
           reactContext.getCurrentActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
       });
     } else {
       this.reactContext.getCurrentActivity().runOnUiThread(new Runnable() {
-        @override
+        @Override
         public void run() {
           reactContext.getCurrentActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
