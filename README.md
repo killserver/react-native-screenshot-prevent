@@ -5,7 +5,7 @@
 
 `$ npm install react-native-screenshot-prevent --save`
 
-## fork: https://github.com/suehok/react-native-prevent-screenshot
+## fork: https://github.com/suehok/react-native-screenshot-prevent
 
 ### Mostly automatic installation
 
@@ -17,8 +17,8 @@
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-screenshot-prevent` and add `RNPreventScreenshot.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNPreventScreenshot.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+2. Go to `node_modules` ➜ `react-native-screenshot-prevent` and add `RNScreenshotPrevent.xcodeproj`
+3. In XCode, in the project navigator, select your project. Add `libRNScreenshotPrevent.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
 #### Android

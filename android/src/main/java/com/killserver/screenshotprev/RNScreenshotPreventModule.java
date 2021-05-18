@@ -1,5 +1,5 @@
 
-package com.killserver.screenshoter;
+package com.killserver.screenshotprev;
 
 import android.view.WindowManager;
 
@@ -8,18 +8,18 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
-public class RNPreventScreenshotModule extends ReactContextBaseJavaModule {
+public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
 
   private final ReactApplicationContext reactContext;
 
-  public RNPreventScreenshotModule(ReactApplicationContext reactContext) {
+  public RNScreenshotPreventModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
   }
 
   @Override
   public String getName() {
-    return "RNPreventScreenshot";
+    return "RNScreenshotPrevent";
   }
 
   @ReactMethod

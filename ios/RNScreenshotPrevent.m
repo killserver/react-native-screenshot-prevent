@@ -1,17 +1,18 @@
 
-#import "RNPreventScreenshot.h"
+#import "RNScreenshotPrevent.h"
 #import "UIImage+ImageEffects.h"
 
-@implementation RNPreventScreenshot {
+@implementation RNScreenshotPrevent {
     BOOL enabled;
     UIImageView *obfuscatingView;
 }
+
+RCT_EXPORT_MODULE();
 
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
 }
-RCT_EXPORT_MODULE();
 
 #pragma mark - Lifecycle
 
@@ -68,6 +69,5 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
     self->enabled = _enable;
 }
-
 
 @end
