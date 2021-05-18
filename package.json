@@ -1,0 +1,26 @@
+{
+  "name": "react-native-screenshot-prevent",
+  "version": "1.0.0",
+  "description": "## Getting started",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "killserver",
+  "license": "MIT",
+  "peerDependencies": {
+    "react-native": "^0.41.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/killserver/react-native-screenshot-prevent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/killserver/react-native-screenshot-prevent/issues"
+  },
+  "homepage": "https://github.com/killserver/react-native-screenshot-prevent#readme"
+}
