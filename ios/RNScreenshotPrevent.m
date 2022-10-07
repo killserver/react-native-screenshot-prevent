@@ -64,6 +64,11 @@ RCT_EXPORT_MODULE();
     }
 }
 
++(BOOL) requiresMainQueueSetup
+{
+  return YES;
+}
+
 #pragma mark - Public API
 
 RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
