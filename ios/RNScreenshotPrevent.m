@@ -8,6 +8,9 @@
 }
 
 RCT_EXPORT_MODULE();
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"userDidTakeScreenshot"];
+}
 
 - (dispatch_queue_t)methodQueue
 {
@@ -18,20 +21,26 @@ RCT_EXPORT_MODULE();
 
 - (instancetype)init {
     if ((self = [super init])) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleAppStateResignActive)
-                                                    name:UIApplicationWillResignActiveNotification
-                                                   object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleAppStateActive)
-                                                     name:UIApplicationDidBecomeActiveNotification
-                                                   object:nil];
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        // handle inactive event
+        center addObserver:self selector:@selector(handleAppStateResignActive)
+                                name:UIApplicationWillResignActiveNotification
+                                object:nil];
+        // handle active event
+        center addObserver:self selector:@selector(handleAppStateActive)
+                                name:UIApplicationDidBecomeActiveNotification
+                                object:nil];
+        // handle screenshot taken event
+        center addObserver:self selector:@selector(handleAppScreenshotNotification)
+                                name:UIApplicationUserDidTakeScreenshotNotification
+                                object:nil];
     }
     return self;
 }
 
 #pragma mark - App Notification Methods
 
+/** displays blurry view when app becomes inactive */
 - (void)handleAppStateResignActive {
     if (self->enabled) {
         UIWindow    *keyWindow = [UIApplication sharedApplication].keyWindow;
@@ -50,6 +59,7 @@ RCT_EXPORT_MODULE();
     }
 }
 
+/** removes blurry view when app becomes active */
 - (void)handleAppStateActive {
     if  (self->obfuscatingView) {
         [UIView animateWithDuration: 0.3
@@ -62,6 +72,11 @@ RCT_EXPORT_MODULE();
                          }
          ];
     }
+}
+
+/** sends screenshot taken event into app */
+- (void) handleAppScreenshotNotification {
+    [self sendEventWithName:@"userDidTakeScreenshot" body:nil];
 }
 
 +(BOOL) requiresMainQueueSetup
