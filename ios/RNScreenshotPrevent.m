@@ -23,15 +23,15 @@ RCT_EXPORT_MODULE();
     if ((self = [super init])) {
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         // handle inactive event
-        center addObserver:self selector:@selector(handleAppStateResignActive)
+        [center addObserver:self selector:@selector(handleAppStateResignActive)
                                 name:UIApplicationWillResignActiveNotification
                                 object:nil];
         // handle active event
-        center addObserver:self selector:@selector(handleAppStateActive)
+        [center addObserver:self selector:@selector(handleAppStateActive)
                                 name:UIApplicationDidBecomeActiveNotification
                                 object:nil];
         // handle screenshot taken event
-        center addObserver:self selector:@selector(handleAppScreenshotNotification)
+        [center addObserver:self selector:@selector(handleAppScreenshotNotification)
                                 name:UIApplicationUserDidTakeScreenshotNotification
                                 object:nil];
     }
