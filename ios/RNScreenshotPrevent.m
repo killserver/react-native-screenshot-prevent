@@ -3,6 +3,7 @@
 #import "UIImage+ImageEffects.h"
 
 @implementation RNScreenshotPrevent {
+    BOOL hasListeners;
     BOOL enabled;
     UIImageView *obfuscatingView;
 }
@@ -33,10 +34,14 @@ RCT_EXPORT_MODULE();
     [center addObserver:self selector:@selector(handleAppScreenshotNotification)
                             name:UIApplicationUserDidTakeScreenshotNotification
                             object:nil];
+
+    hasListeners = TRUE;
 }
 
 - (void) stopObserving {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    hasListeners = FALSE;
 }
 
 #pragma mark - App Notification Methods
@@ -77,7 +82,10 @@ RCT_EXPORT_MODULE();
 
 /** sends screenshot taken event into app */
 - (void) handleAppScreenshotNotification {
-    [self sendEventWithName:@"userDidTakeScreenshot" body:nil];
+    // only send events when we have some listeners
+    if(hasListeners){
+        [self sendEventWithName:@"userDidTakeScreenshot" body:nil];
+    }
 }
 
 +(BOOL) requiresMainQueueSetup
