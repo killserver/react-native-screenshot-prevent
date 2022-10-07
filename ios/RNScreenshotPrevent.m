@@ -19,23 +19,24 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - Lifecycle
 
-- (instancetype)init {
-    if ((self = [super init])) {
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        // handle inactive event
-        [center addObserver:self selector:@selector(handleAppStateResignActive)
-                                name:UIApplicationWillResignActiveNotification
-                                object:nil];
-        // handle active event
-        [center addObserver:self selector:@selector(handleAppStateActive)
-                                name:UIApplicationDidBecomeActiveNotification
-                                object:nil];
-        // handle screenshot taken event
-        [center addObserver:self selector:@selector(handleAppScreenshotNotification)
-                                name:UIApplicationUserDidTakeScreenshotNotification
-                                object:nil];
-    }
-    return self;
+- (void) startObserving {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    // handle inactive event
+    [center addObserver:self selector:@selector(handleAppStateResignActive)
+                            name:UIApplicationWillResignActiveNotification
+                            object:nil];
+    // handle active event
+    [center addObserver:self selector:@selector(handleAppStateActive)
+                            name:UIApplicationDidBecomeActiveNotification
+                            object:nil];
+    // handle screenshot taken event
+    [center addObserver:self selector:@selector(handleAppScreenshotNotification)
+                            name:UIApplicationUserDidTakeScreenshotNotification
+                            object:nil];
+}
+
+- (void) stopObserving {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - App Notification Methods
