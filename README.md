@@ -5,9 +5,9 @@
 
 `$ npm install react-native-screenshot-prevent --save`
 
-## fork: https://github.com/suehok/react-native-screenshot-prevent
-
 ### Mostly automatic installation
+
+### React-Native version 0.69.X and higher: on IOS you might use only `pod install` in your ios folder
 
 `$ react-native link react-native-screenshot-prevent`
 
