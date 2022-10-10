@@ -60,8 +60,7 @@ RCT_EXPORT_MODULE();
         blurredScreenImageView.image = [viewImage applyLightEffect];
 
         self->obfuscatingView = blurredScreenImageView;
-        [[UIApplication sharedApplication].keyWindow addSubview:self->obfuscatingView];
-
+        [keyWindow addSubview:self->obfuscatingView];
     }
 }
 
@@ -93,10 +92,57 @@ RCT_EXPORT_MODULE();
   return YES;
 }
 
+/**
+ * creates secure text field inside rootView of the app
+ * taken from https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app
+ * 
+ * converted to ObjC and modified to get it working with RCT
+ */
+-(void) addSecureTextFieldToView:(UIView *) view {
+    UITextField *field = [[UITextField alloc] init];
+    field.secureTextEntry = TRUE;
+    field.userInteractionEnabled = FALSE;
+
+    [view sendSubviewToBack:field];
+    [view addSubview:field];
+    [[field.centerYAnchor constraintEqualToAnchor:view.centerYAnchor] setActive:YES];
+    [[field.centerXAnchor constraintEqualToAnchor:view.centerXAnchor] setActive:YES];
+    [view.layer.superlayer addSublayer:field.layer];
+    [[field.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
+}
+
+// TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
+-(void) removeSecureTextFieldFromView:(UIView *) view {
+    for(UITextField *subview in view.subviews){
+        if([subview isMemberOfClass:[UITextField class]]){
+            if(subview.secureTextEntry == TRUE){
+                [subview removeFromSuperview];
+            }
+        }
+    }
+}
+
 #pragma mark - Public API
 
 RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
     self->enabled = _enable;
 }
+
+/** adds secure textfield view */
+RCT_EXPORT_METHOD(enableSecureView){
+    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    for(UIView *subview in view.subviews){
+        [self addSecureTextFieldToView:subview];
+    }
+}
+
+/** removes secure textfield from the view */
+RCT_EXPORT_METHOD(disableSecureView) {
+    /*UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    for(UIView *subview in view.subviews){
+        [self removeSecureTextFieldFromView:subview];
+    }*/
+}
+
 
 @end
