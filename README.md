@@ -40,8 +40,18 @@
 
 ## Usage
 ```javascript
+
 import RNPreventScreenshot from 'react-native-screenshot-prevent';
 
+/* (IOS, Android) for android might be the only step to get secureView, on IOS enables blurry view when app goes into inactive state */
 RNPreventScreenshot.enabled(true/false);
+
+/* (IOS) enableSecureView for IOS13+ - creates hidden secureTextField which prevents Application UI capture on screenshots */
+RNPreventScreenshot.enableSecureView();
+
+/* (IOS) notification handler - notifies when user has taken screenshot (yes, after taking) - you can show alert or do some actions */
+/** @returns object with .unsubscribe() method */
+RNPreventScreenshot.addListener(fn);
 ```
+
   
