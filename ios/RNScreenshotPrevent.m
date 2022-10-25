@@ -99,14 +99,14 @@ RCT_EXPORT_MODULE();
  * converted to ObjC and modified to get it working with RCT
  */
 -(void) addSecureTextFieldToView:(UIView *) view {
-    UITextField *field = [[UITextField alloc] init];
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    // fixes safe-area
+    UITextField *field = [[UITextField alloc] initWithFrame:rootView.frame];
     field.secureTextEntry = TRUE;
     field.userInteractionEnabled = FALSE;
 
     [view sendSubviewToBack:field];
     [view addSubview:field];
-    [[field.centerYAnchor constraintEqualToAnchor:view.centerYAnchor] setActive:YES];
-    [[field.centerXAnchor constraintEqualToAnchor:view.centerXAnchor] setActive:YES];
     [view.layer.superlayer addSublayer:field.layer];
     [[field.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
 }
