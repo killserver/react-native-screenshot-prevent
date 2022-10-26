@@ -3,11 +3,15 @@
 #import "UIImage+ImageEffects.h"
 
 @implementation RNScreenshotPrevent {
+    BOOL hasListeners;
     BOOL enabled;
     UIImageView *obfuscatingView;
 }
 
 RCT_EXPORT_MODULE();
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"userDidTakeScreenshot"];
+}
 
 - (dispatch_queue_t)methodQueue
 {
@@ -16,22 +20,33 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - Lifecycle
 
-- (instancetype)init {
-    if ((self = [super init])) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleAppStateResignActive)
-                                                    name:UIApplicationWillResignActiveNotification
-                                                   object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleAppStateActive)
-                                                     name:UIApplicationDidBecomeActiveNotification
-                                                   object:nil];
-    }
-    return self;
+- (void) startObserving {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    // handle inactive event
+    [center addObserver:self selector:@selector(handleAppStateResignActive)
+                            name:UIApplicationWillResignActiveNotification
+                            object:nil];
+    // handle active event
+    [center addObserver:self selector:@selector(handleAppStateActive)
+                            name:UIApplicationDidBecomeActiveNotification
+                            object:nil];
+    // handle screenshot taken event
+    [center addObserver:self selector:@selector(handleAppScreenshotNotification)
+                            name:UIApplicationUserDidTakeScreenshotNotification
+                            object:nil];
+
+    hasListeners = TRUE;
+}
+
+- (void) stopObserving {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    hasListeners = FALSE;
 }
 
 #pragma mark - App Notification Methods
 
+/** displays blurry view when app becomes inactive */
 - (void)handleAppStateResignActive {
     if (self->enabled) {
         UIWindow    *keyWindow = [UIApplication sharedApplication].keyWindow;
@@ -45,11 +60,11 @@ RCT_EXPORT_MODULE();
         blurredScreenImageView.image = [viewImage applyLightEffect];
 
         self->obfuscatingView = blurredScreenImageView;
-        [[UIApplication sharedApplication].keyWindow addSubview:self->obfuscatingView];
-
+        [keyWindow addSubview:self->obfuscatingView];
     }
 }
 
+/** removes blurry view when app becomes active */
 - (void)handleAppStateActive {
     if  (self->obfuscatingView) {
         [UIView animateWithDuration: 0.3
@@ -64,10 +79,70 @@ RCT_EXPORT_MODULE();
     }
 }
 
+/** sends screenshot taken event into app */
+- (void) handleAppScreenshotNotification {
+    // only send events when we have some listeners
+    if(hasListeners){
+        [self sendEventWithName:@"userDidTakeScreenshot" body:nil];
+    }
+}
+
++(BOOL) requiresMainQueueSetup
+{
+  return YES;
+}
+
+/**
+ * creates secure text field inside rootView of the app
+ * taken from https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app
+ * 
+ * converted to ObjC and modified to get it working with RCT
+ */
+-(void) addSecureTextFieldToView:(UIView *) view {
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    // fixes safe-area
+    UITextField *field = [[UITextField alloc] initWithFrame:rootView.frame];
+    field.secureTextEntry = TRUE;
+    field.userInteractionEnabled = FALSE;
+
+    [view sendSubviewToBack:field];
+    [view addSubview:field];
+    [view.layer.superlayer addSublayer:field.layer];
+    [[field.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
+}
+
+// TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
+-(void) removeSecureTextFieldFromView:(UIView *) view {
+    for(UITextField *subview in view.subviews){
+        if([subview isMemberOfClass:[UITextField class]]){
+            if(subview.secureTextEntry == TRUE){
+                [subview removeFromSuperview];
+            }
+        }
+    }
+}
+
 #pragma mark - Public API
 
 RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
     self->enabled = _enable;
 }
+
+/** adds secure textfield view */
+RCT_EXPORT_METHOD(enableSecureView){
+    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    for(UIView *subview in view.subviews){
+        [self addSecureTextFieldToView:subview];
+    }
+}
+
+/** removes secure textfield from the view */
+RCT_EXPORT_METHOD(disableSecureView) {
+    /*UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    for(UIView *subview in view.subviews){
+        [self removeSecureTextFieldFromView:subview];
+    }*/
+}
+
 
 @end

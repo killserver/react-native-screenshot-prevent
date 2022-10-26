@@ -1,13 +1,20 @@
 
 # react-native-screenshot-prevent
 
+### This fork contains fully working blank screenshot on IOS13+ including screen recording
+### App layout is white / or black in dark theme
+
+#### For now you might disable RNPreventScreenshot.enableSecureView() in development mode (check __DEV__ variable)
+#### because disableSecureView() is not working yet correctly
+
+
 ## Getting started
 
 `$ npm install react-native-screenshot-prevent --save`
 
-## fork: https://github.com/suehok/react-native-screenshot-prevent
-
 ### Mostly automatic installation
+
+### React-Native version 0.69.X and higher: on IOS you might use only `pod install` in your ios folder
 
 `$ react-native link react-native-screenshot-prevent`
 
@@ -40,8 +47,45 @@
 
 ## Usage
 ```javascript
-import RNPreventScreenshot from 'react-native-screenshot-prevent';
 
+// sample code
+
+import RNScreenshotPrevent, { addListener } from 'react-native-screenshot-prevent';
+
+/* (IOS, Android) for android might be the only step to get secureView
+ * on IOS enables blurry view when app goes into inactive state
+ */
 RNPreventScreenshot.enabled(true/false);
+
+/* (IOS) enableSecureView for IOS13+ 
+ * creates a hidden secureTextField which prevents Application UI capture on screenshots
+ */
+if(!__DEV__) RNPreventScreenshot.enableSecureView();
+
+/* (IOS) notification handler
+ * notifies when user has taken screenshot (yes, after taking) - you can show alert or do some actions
+ *
+ * @param {function} callback fn
+ * @returns object with .remove() method
+ */
+addListener(fn);
+
+/** example using the listener */
+useEffect(() => {
+	const subscription = RNPreventScreenshot.addListener(() => {
+		console.log('Screenshot taken');
+		showAlert({
+			title: 'Warning',
+			message: 'You have taken a screenshot of the app. This is prohibited due to security reasons.',
+			confirmText: 'I understand'
+		});
+	})
+
+	return () => {
+		subscription.remove();
+	}
+}, []);
+
 ```
+
   
