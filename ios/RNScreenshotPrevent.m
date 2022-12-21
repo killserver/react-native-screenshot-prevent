@@ -138,10 +138,10 @@ RCT_EXPORT_METHOD(enableSecureView){
 
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
-    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    /*UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
     for(UIView *subview in view.subviews){
         [self removeSecureTextFieldFromView:subview];
-    }
+    }*/
 }
 
 
