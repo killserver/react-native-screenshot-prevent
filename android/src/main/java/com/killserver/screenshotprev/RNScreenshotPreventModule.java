@@ -24,7 +24,7 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enabled(boolean _enable) {
-    if(this.reactContext != null){
+    if (this.reactContext.hasCurrentActivity()) {
       if (_enable) {
         this.reactContext.getCurrentActivity().runOnUiThread(new Runnable() {
           @Override
