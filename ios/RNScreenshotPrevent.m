@@ -6,6 +6,8 @@
     BOOL hasListeners;
     BOOL enabled;
     UIImageView *obfuscatingView;
+    UITextField *secureField;
+
 }
 
 RCT_EXPORT_MODULE();
@@ -109,6 +111,7 @@ RCT_EXPORT_MODULE();
     [view addSubview:field];
     [view.layer.superlayer addSublayer:field.layer];
     [[field.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
+    secureField = field;
 }
 
 // TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
@@ -138,10 +141,7 @@ RCT_EXPORT_METHOD(enableSecureView){
 
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
-    /*UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-    for(UIView *subview in view.subviews){
-        [self removeSecureTextFieldFromView:subview];
-    }*/
+    secureField.secureTextEntry = false;
 }
 
 
