@@ -1,3 +1,4 @@
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
 # react-native-screenshot-prevent
 
@@ -94,3 +95,4 @@ useEffect(() => {
 ```
 
   
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/killeserver){:target="_blank"}
