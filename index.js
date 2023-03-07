@@ -14,7 +14,11 @@ if(Platform.OS !== "web") {
     addListen = (fn) => {
         if(typeof(fn) !== 'function'){
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
-            return;
+            return {
+                remove: () => {
+                    console.error("RNScreenshotPrevent: remove not work because addListener requires valid callback function");
+                }
+            };
         }
 
         return eventEmitter.addListener("userDidTakeScreenshot", fn);
@@ -34,9 +38,18 @@ if(Platform.OS !== "web") {
     addListen = (fn) => {
         if(typeof(fn) !== 'function'){
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
-            return;
+            return {
+                remove: () => {
+                    console.error("RNScreenshotPrevent: remove not work because addListener requires valid callback function");
+                }
+            };
         }
         console.warn("RNScreenshotPrevent: addListener not work in web");
+        return {
+            remove: () => {
+                console.warn("RNScreenshotPrevent: remove addListener not work in web");
+            }
+        }
     }
 }
 
