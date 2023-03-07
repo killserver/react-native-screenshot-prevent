@@ -45,6 +45,16 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
       }
     }
   }
+  
+  @ReactMethod
+  public void enableSecureView() {
+
+  }
+  
+  @ReactMethod
+  public void disableSecureView() {
+
+  }
 
   // Required for rn built in EventEmitter Calls.
   @ReactMethod

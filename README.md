@@ -14,7 +14,7 @@
 
 ### Mostly automatic installation
 
-### React-Native version 0.69.X and higher: on IOS you might use only `pod install` in your ios folder
+### React-Native version 0.59.X and higher: on IOS you might use only `pod install` in your ios folder
 
 `$ react-native link react-native-screenshot-prevent`
 
@@ -61,6 +61,11 @@ RNPreventScreenshot.enabled(true/false);
  * creates a hidden secureTextField which prevents Application UI capture on screenshots
  */
 if(!__DEV__) RNPreventScreenshot.enableSecureView();
+
+/* (IOS) disableSecureView for IOS13+ 
+ * remove a hidden secureTextField which prevents Application UI capture on screenshots
+ */
+if(!__DEV__) RNPreventScreenshot.disableSecureView();
 
 /* (IOS) notification handler
  * notifies when user has taken screenshot (yes, after taking) - you can show alert or do some actions
