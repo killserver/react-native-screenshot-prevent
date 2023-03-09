@@ -29,14 +29,14 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
       final Activity activity = this.reactContext.getCurrentActivity();
       if (activity != null) {
         if (_enable) {
-          activity.getCurrentActivity().runOnUiThread(new Runnable() {
+          activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
               reactContext.getCurrentActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             }
           });
         } else {
-          activity.getCurrentActivity().runOnUiThread(new Runnable() {
+          activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
               reactContext.getCurrentActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
