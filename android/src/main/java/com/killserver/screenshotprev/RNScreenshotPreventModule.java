@@ -3,6 +3,7 @@ package com.killserver.screenshotprev;
 
 import android.view.WindowManager;
 
+import android.app.Activity;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
