@@ -133,9 +133,11 @@ RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
 
 /** adds secure textfield view */
 RCT_EXPORT_METHOD(enableSecureView){
-    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-    for(UIView *subview in view.subviews){
-        [self addSecureTextFieldToView:subview];
+    if(secureField.secureTextEntry == false){
+        UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+        for(UIView *subview in view.subviews){
+            [self addSecureTextFieldToView:subview];
+        }
     }
 }
 
