@@ -103,15 +103,14 @@ RCT_EXPORT_MODULE();
 -(void) addSecureTextFieldToView:(UIView *) view {
     UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
     // fixes safe-area
-    UITextField *field = [[UITextField alloc] initWithFrame:rootView.frame];
-    field.secureTextEntry = TRUE;
-    field.userInteractionEnabled = FALSE;
+    secureField = [[UITextField alloc] initWithFrame:rootView.frame];
+    secureField.secureTextEntry = TRUE;
+    secureField.userInteractionEnabled = FALSE;
 
-    [view sendSubviewToBack:field];
-    [view addSubview:field];
-    [view.layer.superlayer addSublayer:field.layer];
-    [[field.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
-    secureField = field;
+    [view sendSubviewToBack:secureField];
+    [view addSubview:secureField];
+    [view.layer.superlayer addSublayer:secureField.layer];
+    [[secureField.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
 }
 
 // TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
