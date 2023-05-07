@@ -1,4 +1,5 @@
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import { useEffect } from 'react';
 
 let addListen, RNScreenshotPrevent;
 if(Platform.OS !== "web") {
@@ -11,11 +12,11 @@ if(Platform.OS !== "web") {
      * @param {function} callback handler
      * @returns {function} unsubscribe fn
      */
-    addListen = (fn) => {
-        if(typeof(fn) !== 'function'){
+    addListen = (fn): void => {
+        if(typeof(fn) !== 'function') {
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
             return {
-                remove: () => {
+                remove: (): void => {
                     console.error("RNScreenshotPrevent: remove not work because addListener requires valid callback function");
                 }
             };
@@ -25,32 +26,50 @@ if(Platform.OS !== "web") {
     }
 } else {
     RNScreenshotPrevent = {
-        enabled: (enabled) => {
+        enabled: (enabled: boolean): void => {
             console.warn("RNScreenshotPrevent: enabled not work in web");
         },
-        enableSecureView: () => {
+        enableSecureView: (): void => {
             console.warn("RNScreenshotPrevent: enableSecureView not work in web");
         },
-        disableSecureView: () => {
+        disableSecureView: (): void => {
             console.warn("RNScreenshotPrevent: disableSecureView not work in web");
         }
     }
-    addListen = (fn) => {
-        if(typeof(fn) !== 'function'){
+    addListen = (fn): void => {
+        if(typeof(fn) !== 'function') {
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
             return {
-                remove: () => {
+                remove: (): void => {
                     console.error("RNScreenshotPrevent: remove not work because addListener requires valid callback function");
                 }
             };
         }
         console.warn("RNScreenshotPrevent: addListener not work in web");
         return {
-            remove: () => {
+            remove: (): void => {
                 console.warn("RNScreenshotPrevent: remove addListener not work in web");
             }
         }
     }
+}
+
+export const usePreventScreenshot = () => {
+    useEffect(() => {
+        RNScreenshotPrevent.enabled(true);
+        return () => {
+            RNScreenshotPrevent.enabled(false);
+        };
+    }, []);
+}
+
+export const useDisableSecureView = () => {
+    useEffect(() => {
+        RNScreenshotPrevent.enableSecureView();
+        return () => {
+            RNScreenshotPrevent.disableSecureView();
+        };
+    }, []);
 }
 
 export const addListener = addListen
