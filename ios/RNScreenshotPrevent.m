@@ -84,7 +84,7 @@ RCT_EXPORT_MODULE();
 /** sends screenshot taken event into app */
 - (void) handleAppScreenshotNotification {
     // only send events when we have some listeners
-    if(hasListeners){
+    if(hasListeners) {
         [self sendEventWithName:@"userDidTakeScreenshot" body:nil];
     }
 }
@@ -116,9 +116,11 @@ RCT_EXPORT_MODULE();
 // TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
 -(void) removeSecureTextFieldFromView:(UIView *) view {
     for(UITextField *subview in view.subviews){
-        if([subview isMemberOfClass:[UITextField class]]){
-            if(subview.secureTextEntry == TRUE){
+        if([subview isMemberOfClass:[UITextField class]]) {
+            if(subview.secureTextEntry == TRUE) {
                 [subview removeFromSuperview];
+                subview.secureTextEntry = FALSE;
+                secureField.userInteractionEnabled = TRUE;
             }
         }
     }
@@ -132,9 +134,9 @@ RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
 
 /** adds secure textfield view */
 RCT_EXPORT_METHOD(enableSecureView){
-    if(secureField.secureTextEntry == false){
+    if(secureField.secureTextEntry == false) {
         UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-        for(UIView *subview in view.subviews){
+        for(UIView *subview in view.subviews) {
             [self addSecureTextFieldToView:subview];
         }
     }
@@ -143,6 +145,10 @@ RCT_EXPORT_METHOD(enableSecureView){
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
     secureField.secureTextEntry = false;
+    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    for(UIView *subview in view.subviews) {
+        [self removeSecureTextFieldFromView:subview];
+    }
 }
 
 
