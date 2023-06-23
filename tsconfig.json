@@ -4,13 +4,16 @@
     "paths": {
       "react-native-screenshot-prevent": ["./src/index"]
     },
+    "ignoreDeprecations": "5.0",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
+    "allowJs": true,
     "esModuleInterop": true,
     "importsNotUsedAsValues": "error",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": ["esnext"],
+    "lib": ["esnext","ES6","DOM"],
+    "types": ["react"],
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
