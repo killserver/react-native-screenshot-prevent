@@ -1,7 +1,12 @@
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 import { useEffect } from 'react';
 
-let addListen, RNScreenshotPrevent;
+type FN = (resp: any) => void
+type Return = {
+    readonly remove: () => void
+}
+
+let addListen: any, RNScreenshotPrevent: any;
 if(Platform.OS !== "web") {
     const { RNScreenshotPrevent: RNScreenshotPreventNative } = NativeModules;
     RNScreenshotPrevent = RNScreenshotPreventNative
@@ -12,7 +17,7 @@ if(Platform.OS !== "web") {
      * @param {function} callback handler
      * @returns {function} unsubscribe fn
      */
-    addListen = (fn): void => {
+    addListen = (fn: FN): Return => {
         if(typeof(fn) !== 'function') {
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
             return {
@@ -27,7 +32,7 @@ if(Platform.OS !== "web") {
 } else {
     RNScreenshotPrevent = {
         enabled: (enabled: boolean): void => {
-            console.warn("RNScreenshotPrevent: enabled not work in web");
+            console.warn("RNScreenshotPrevent: enabled not work in web. value: "+enabled);
         },
         enableSecureView: (): void => {
             console.warn("RNScreenshotPrevent: enableSecureView not work in web");
@@ -36,7 +41,7 @@ if(Platform.OS !== "web") {
             console.warn("RNScreenshotPrevent: disableSecureView not work in web");
         }
     }
-    addListen = (fn): void => {
+    addListen = (fn: FN): Return => {
         if(typeof(fn) !== 'function') {
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
             return {
@@ -72,5 +77,8 @@ export const useDisableSecureView = () => {
     }, []);
 }
 
-export const addListener = addListen
+export const enabled: (enabled: boolean) => void = RNScreenshotPrevent.enabled
+export const enableSecureView: () => void = RNScreenshotPrevent.enableSecureView
+export const disableSecureView: () => void = RNScreenshotPrevent.disableSecureView
+export const addListener: (fn: FN) => void = addListen
 export default RNScreenshotPrevent;

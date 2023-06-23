@@ -1,10 +1,10 @@
 {
   "name": "react-native-screenshot-prevent",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "This fork contains fully working blank screenshot on IOS13+ including screen recording",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
-  "types": "index.d.ts",
+  "types": "./src/index.d.ts",
   "react-native": "index",
   "source": "./src/index",
   "files": [
@@ -28,6 +28,7 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit",
+    "prepare": "bob build",
     "lint": "eslint \"**/*.{js,ts,tsx}\""
   },
   "keywords": [
@@ -43,6 +44,7 @@
   },
   "homepage": "https://github.com/killserver/react-native-screenshot-prevent#readme",
   "devDependencies": {
+    "@react-native-community/bob": "^0.4.1",
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.2.2",
     "@react-native-community/eslint-config": "^3.0.2",
@@ -112,6 +114,14 @@
     "tabWidth": 4,
     "trailingComma": "es5",
     "useTabs": true
+  },
+  "@react-native-community/bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "module",
+      "typescript"
+    ]
   },
   "codegenConfig": {
     "name": "RNScreenshotPreventSpec",
