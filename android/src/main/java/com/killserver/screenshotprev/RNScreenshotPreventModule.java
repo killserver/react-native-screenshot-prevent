@@ -49,12 +49,32 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
   
   @ReactMethod
   public void enableSecureView() {
-
+    if (this.reactContext.hasCurrentActivity()) {
+      final Activity activity = this.reactContext.getCurrentActivity();
+      if (activity != null) {
+        activity.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            reactContext.getCurrentActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+          }
+        });
+      }
+    }
   }
   
   @ReactMethod
   public void disableSecureView() {
-
+    if (this.reactContext.hasCurrentActivity()) {
+      final Activity activity = this.reactContext.getCurrentActivity();
+      if (activity != null) {
+        activity.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            reactContext.getCurrentActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+          }
+        });
+      }
+    }
   }
 
   // Required for rn built in EventEmitter Calls.
