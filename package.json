@@ -1,6 +1,6 @@
 {
   "name": "react-native-screenshot-prevent",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "This fork contains fully working blank screenshot on IOS13+ including screen recording",
   "main": "lib/module/index",
   "module": "lib/module/index",
@@ -127,6 +127,6 @@
   "codegenConfig": {
     "name": "RNScreenshotPreventSpec",
     "type": "modules",
-    "jsSrcsDir": "src"
+    "jsSrcsDir": "lib"
   }
 }
