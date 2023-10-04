@@ -110,7 +110,7 @@ RCT_EXPORT_MODULE();
     [view sendSubviewToBack:secureField];
     [view addSubview:secureField];
     [view.layer.superlayer addSublayer:secureField.layer];
-    [[secureField.layer.sublayers objectAtIndex:0] addSublayer:view.layer];
+    [[secureField.layer.sublayers lastObject] addSublayer:view.layer];
 }
 
 // TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
