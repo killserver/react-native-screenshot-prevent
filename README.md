@@ -31,9 +31,9 @@
 
 #### Android
 
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.killserver.screenshotprev.RNPreventScreenshotPackage;` to the imports at the top of the file
-  - Add `new RNPreventScreenshotPackage()` to the list returned by the `getPackages()` method
+1. Open up `android/app/src/main/java/[...]/MainApplication.java`
+  - Add `import com.killserver.screenshotprev.RNScreenshotPreventPackage;` to the imports at the top of the file
+  - Add `new RNScreenshotPreventPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-screenshot-prevent'
@@ -41,7 +41,7 @@
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-screenshot-prevent')
+       implementation project(':react-native-screenshot-prevent')
   	```
 
 
