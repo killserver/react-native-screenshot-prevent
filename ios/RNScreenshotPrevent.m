@@ -1,4 +1,3 @@
-
 #import "RNScreenshotPrevent.h"
 #import "UIImage+ImageEffects.h"
 
@@ -94,18 +93,68 @@ RCT_EXPORT_MODULE();
   return YES;
 }
 
+CGSize CGSizeAspectFit(const CGSize aspectRatio, const CGSize boundingSize)
+{
+    CGSize aspectFitSize = CGSizeMake(boundingSize.width, boundingSize.height);
+    float mW = boundingSize.width / aspectRatio.width;
+    float mH = boundingSize.height / aspectRatio.height;
+    if( mH < mW )
+        aspectFitSize.width = mH * aspectRatio.width;
+    else if( mW < mH )
+        aspectFitSize.height = mW * aspectRatio.height;
+    return aspectFitSize;
+}
+
+CGSize CGSizeAspectFill(const CGSize aspectRatio, const CGSize minimumSize)
+{
+    CGSize aspectFillSize = CGSizeMake(minimumSize.width, minimumSize.height);
+    float mW = minimumSize.width / aspectRatio.width;
+    float mH = minimumSize.height / aspectRatio.height;
+    if( mH > mW )
+        aspectFillSize.width = mH * aspectRatio.width;
+    else if( mW > mH )
+        aspectFillSize.height = mW * aspectRatio.height;
+    return aspectFillSize;
+}
+
+
 /**
  * creates secure text field inside rootView of the app
  * taken from https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app
  * 
  * converted to ObjC and modified to get it working with RCT
  */
--(void) addSecureTextFieldToView:(UIView *) view {
+-(void) addSecureTextFieldToView:(UIView *) view :(NSString *) imagePath {
+    
     UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    
+    
     // fixes safe-area
     secureField = [[UITextField alloc] initWithFrame:rootView.frame];
     secureField.secureTextEntry = TRUE;
     secureField.userInteractionEnabled = FALSE;
+
+    if (imagePath && ![imagePath isEqualToString:@""]) {
+        UIView * imgView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, rootView.frame.size.width, rootView.frame.size.height)];
+        NSURL *url = [NSURL URLWithString:imagePath];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        UIImage *img = [[UIImage alloc] initWithData:data];
+        
+        CGSize sizeBeingScaledTo = CGSizeAspectFill(img.size, imgView.frame.size);
+        
+        // redraw the image to fit the screen size
+        UIGraphicsBeginImageContextWithOptions(imgView.frame.size, NO, 0.f);
+        
+        float offsetX = (imgView.frame.size.width - sizeBeingScaledTo.width) / 2;
+        float offsety = (imgView.frame.size.height - sizeBeingScaledTo.height) / 2;
+        
+        
+        [img drawInRect:CGRectMake(offsetX, offsety, sizeBeingScaledTo.width, sizeBeingScaledTo.height)];
+        UIImage * resultImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        secureField.backgroundColor = [UIColor colorWithPatternImage:resultImage];
+    }
 
     [view sendSubviewToBack:secureField];
     [view addSubview:secureField];
@@ -133,11 +182,11 @@ RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
 }
 
 /** adds secure textfield view */
-RCT_EXPORT_METHOD(enableSecureView){
+RCT_EXPORT_METHOD(enableSecureView: (NSString *)imagePath) {
     if(secureField.secureTextEntry == false) {
         UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         for(UIView *subview in view.subviews) {
-            [self addSecureTextFieldToView:subview];
+            [self addSecureTextFieldToView:subview :imagePath];
         }
     }
 }

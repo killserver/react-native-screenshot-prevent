@@ -3,6 +3,7 @@
 # react-native-screenshot-prevent
 
 ### This fork contains fully working blank screenshot on IOS13+ including screen recording
+### This fork contains fully working image screenshot cover on IOS13+ including screen recording
 ### App layout is white / or black in dark theme
 
 #### For now you might disable RNPreventScreenshot.enableSecureView() in development mode (check __DEV__ variable)
@@ -62,6 +63,12 @@ RNPreventScreenshot.enabled(true/false);
  * creates a hidden secureTextField which prevents Application UI capture on screenshots
  */
 if(!__DEV__) RNPreventScreenshot.enableSecureView();
+
+/* (IOS) enableSecureView for IOS13+ 
+ * creates a hidden secureTextField which prevents Application UI capture on screenshots
+ * and uses imgUri as the source of the background image (can be both https://, file:///)
+ */
+if(!__DEV__) RNPreventScreenshot.enableSecureView(imgUri);
 
 /* (IOS) disableSecureView for IOS13+ 
  * remove a hidden secureTextField which prevents Application UI capture on screenshots

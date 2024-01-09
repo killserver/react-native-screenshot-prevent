@@ -5,11 +5,15 @@ type FN = (resp: any) => void
 type Return = {
     readonly remove: () => void
 }
-
 let addListen: any, RNScreenshotPrevent: any;
 if(Platform.OS !== "web") {
     const { RNScreenshotPrevent: RNScreenshotPreventNative } = NativeModules;
-    RNScreenshotPrevent = RNScreenshotPreventNative
+    RNScreenshotPrevent = {
+        ...RNScreenshotPreventNative,
+        enableSecureView: function enableSecureView(imagePath = "") {
+            RNScreenshotPreventNative.enableSecureView(imagePath)
+        }
+    }
     const eventEmitter = new NativeEventEmitter(RNScreenshotPrevent);
 
     /**
@@ -78,7 +82,7 @@ export const useDisableSecureView = () => {
 }
 
 export const enabled: (enabled: boolean) => void = RNScreenshotPrevent.enabled
-export const enableSecureView: () => void = RNScreenshotPrevent.enableSecureView
+export const enableSecureView: (imagePath?: string) => void = RNScreenshotPrevent.enableSecureView
 export const disableSecureView: () => void = RNScreenshotPrevent.disableSecureView
 export const addListener: (fn: FN) => void = addListen
 export default RNScreenshotPrevent;
