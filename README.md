@@ -56,17 +56,17 @@ import RNScreenshotPrevent, { addListener } from 'react-native-screenshot-preven
 /* (IOS, Android) for android might be the only step to get secureView
  * on IOS enables blurry view when app goes into inactive state
  */
-RNPreventScreenshot.enabled(true/false);
+RNScreenshotPrevent.enabled(true/false);
 
 /* (IOS) enableSecureView for IOS13+ 
  * creates a hidden secureTextField which prevents Application UI capture on screenshots
  */
-if(!__DEV__) RNPreventScreenshot.enableSecureView();
+if(!__DEV__) RNScreenshotPrevent.enableSecureView();
 
 /* (IOS) disableSecureView for IOS13+ 
  * remove a hidden secureTextField which prevents Application UI capture on screenshots
  */
-if(!__DEV__) RNPreventScreenshot.disableSecureView();
+if(!__DEV__) RNScreenshotPrevent.disableSecureView();
 
 /* (IOS) notification handler
  * notifies when user has taken screenshot (yes, after taking) - you can show alert or do some actions
@@ -78,7 +78,7 @@ addListener(fn);
 
 /** example using the listener */
 useEffect(() => {
-	const subscription = RNPreventScreenshot.addListener(() => {
+	const subscription = RNScreenshotPrevent.addListener(() => {
 		console.log('Screenshot taken');
 		showAlert({
 			title: 'Warning',
