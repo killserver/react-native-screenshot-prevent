@@ -32,14 +32,14 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
           activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-              reactContext.getCurrentActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+              activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             }
           });
         } else {
           activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-              reactContext.getCurrentActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+              activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
             }
           });
         }
@@ -55,7 +55,7 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
         activity.runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            reactContext.getCurrentActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
           }
         });
       }
@@ -70,7 +70,7 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule {
         activity.runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            reactContext.getCurrentActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
           }
         });
       }
