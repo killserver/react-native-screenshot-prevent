@@ -6,12 +6,16 @@ type Return = {
     readonly remove: () => void
 }
 let addListen: any, RNScreenshotPrevent: any;
-if(Platform.OS !== "web") {
+if (Platform.OS !== "web") {
     const { RNScreenshotPrevent: RNScreenshotPreventNative } = NativeModules;
     RNScreenshotPrevent = {
         ...RNScreenshotPreventNative,
         enableSecureView: function enableSecureView(imagePath = "") {
-            RNScreenshotPreventNative.enableSecureView(imagePath)
+            if (Platform.OS === "ios") {
+                RNScreenshotPreventNative.enableSecureView(imagePath)
+            } else {
+                RNScreenshotPreventNative.enableSecureView()
+            }
         }
     }
     const eventEmitter = new NativeEventEmitter(RNScreenshotPrevent);
@@ -22,7 +26,7 @@ if(Platform.OS !== "web") {
      * @returns {function} unsubscribe fn
      */
     addListen = (fn: FN): Return => {
-        if(typeof(fn) !== 'function') {
+        if (typeof (fn) !== 'function') {
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
             return {
                 remove: (): void => {
@@ -36,7 +40,7 @@ if(Platform.OS !== "web") {
 } else {
     RNScreenshotPrevent = {
         enabled: (enabled: boolean): void => {
-            console.warn("RNScreenshotPrevent: enabled not work in web. value: "+enabled);
+            console.warn("RNScreenshotPrevent: enabled not work in web. value: " + enabled);
         },
         enableSecureView: (): void => {
             console.warn("RNScreenshotPrevent: enableSecureView not work in web");
@@ -46,7 +50,7 @@ if(Platform.OS !== "web") {
         }
     }
     addListen = (fn: FN): Return => {
-        if(typeof(fn) !== 'function') {
+        if (typeof (fn) !== 'function') {
             console.error('RNScreenshotPrevent: addListener requires valid callback function');
             return {
                 remove: (): void => {
