@@ -10,12 +10,8 @@ if (Platform.OS !== "web") {
     const { RNScreenshotPrevent: RNScreenshotPreventNative } = NativeModules;
     RNScreenshotPrevent = {
         ...RNScreenshotPreventNative,
-        enableSecureView: function enableSecureView(imagePath = "") {
-            if (Platform.OS === "ios") {
-                RNScreenshotPreventNative.enableSecureView(imagePath)
-            } else {
-                RNScreenshotPreventNative.enableSecureView()
-            }
+        enableSecureView: function enableSecureView(imagePath: string = "") {
+            RNScreenshotPreventNative.enableSecureView(imagePath)
         }
     }
     const eventEmitter = new NativeEventEmitter(RNScreenshotPrevent);
@@ -42,8 +38,8 @@ if (Platform.OS !== "web") {
         enabled: (enabled: boolean): void => {
             console.warn("RNScreenshotPrevent: enabled not work in web. value: " + enabled);
         },
-        enableSecureView: (): void => {
-            console.warn("RNScreenshotPrevent: enableSecureView not work in web");
+        enableSecureView: (imagePath: string = ""): void => {
+            console.warn("RNScreenshotPrevent: enableSecureView not work in web."+(!!imagePath ? " send: "+imagePath : ""));
         },
         disableSecureView: (): void => {
             console.warn("RNScreenshotPrevent: disableSecureView not work in web");
@@ -76,9 +72,9 @@ export const usePreventScreenshot = () => {
     }, []);
 }
 
-export const useDisableSecureView = () => {
+export const useDisableSecureView = (imagePath: string = "") => {
     useEffect(() => {
-        RNScreenshotPrevent.enableSecureView();
+        RNScreenshotPrevent.enableSecureView(imagePath);
         return () => {
             RNScreenshotPrevent.disableSecureView();
         };
