@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/killserver/react-native-screenshot-prevent#readme",
   "devDependencies": {
-    "@react-native-community/bob": "^0.4.1",
+    "@react-native-community/bob": "^0.10.1",
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.2.2",
     "@react-native-community/eslint-config": "^3.0.2",
