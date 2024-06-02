@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "outDir": "./lib/typescript",
+    "rootDir": "./src",
     "paths": {
       "react-native-screenshot-prevent": ["./src/index"]
     },
@@ -27,5 +29,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext"
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["lib"]
 }
