@@ -117,61 +117,45 @@ CGSize CGSizeAspectFill(const CGSize aspectRatio, const CGSize minimumSize)
     return aspectFillSize;
 }
 
-
 /**
- * creates secure text field inside rootView of the app
- * taken from https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app
+ * Creates secure text field inside the UIApplication's `keyWindow`
  * 
- * converted to ObjC and modified to get it working with RCT
  */
--(void) addSecureTextFieldToView:(UIView *) view :(NSString *) imagePath {
-    
-    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-    
-    
-    // fixes safe-area
-    secureField = [[UITextField alloc] initWithFrame:rootView.frame];
-    secureField.secureTextEntry = TRUE;
-    secureField.userInteractionEnabled = FALSE;
-
-    if (imagePath && ![imagePath isEqualToString:@""]) {
-        UIView * imgView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, rootView.frame.size.width, rootView.frame.size.height)];
-        NSURL *url = [NSURL URLWithString:imagePath];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *img = [[UIImage alloc] initWithData:data];
-        
-        CGSize sizeBeingScaledTo = CGSizeAspectFill(img.size, imgView.frame.size);
-        
-        // redraw the image to fit the screen size
-        UIGraphicsBeginImageContextWithOptions(imgView.frame.size, NO, 0.f);
-        
-        float offsetX = (imgView.frame.size.width - sizeBeingScaledTo.width) / 2;
-        float offsety = (imgView.frame.size.height - sizeBeingScaledTo.height) / 2;
-        
-        
-        [img drawInRect:CGRectMake(offsetX, offsety, sizeBeingScaledTo.width, sizeBeingScaledTo.height)];
-        UIImage * resultImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        secureField.backgroundColor = [UIColor colorWithPatternImage:resultImage];
+- (void) addSecureView {
+    if (@available(iOS 13.0, *)) {
+        if (secureField == nil) {
+            [self initTextField];
+        }
+        [secureField setSecureTextEntry: TRUE];
     }
-
-    [view sendSubviewToBack:secureField];
-    [view addSubview:secureField];
-    [view.layer.superlayer addSublayer:secureField.layer];
-    [[secureField.layer.sublayers lastObject] addSublayer:view.layer];
 }
 
-// TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
--(void) removeSecureTextFieldFromView:(UIView *) view {
-    for(UITextField *subview in view.subviews){
-        if([subview isMemberOfClass:[UITextField class]]) {
-            if(subview.secureTextEntry == TRUE) {
-                [subview removeFromSuperview];
-                subview.secureTextEntry = FALSE;
-                secureField.userInteractionEnabled = TRUE;
-            }
-        }
+- (void) initTextField {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    secureField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, screenRect.size.width, screenRect.size.height)];
+    secureField.translatesAutoresizingMaskIntoConstraints = NO;
+        
+    [secureField setTextAlignment:NSTextAlignmentCenter];
+    [secureField setUserInteractionEnabled: NO];
+        
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    [window.layer.superlayer addSublayer: secureField.layer];
+        
+    if (secureField.layer.sublayers.firstObject) {
+        [secureField.layer.sublayers.firstObject addSublayer: window.layer];
+    }
+}
+        
+- (void) removeSecureView {
+    if (secureField == nil) { return; }
+        
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        
+    [secureField setSecureTextEntry: FALSE];
+
+    CALayer *textFieldLayer = secureField.layer.sublayers.firstObject;
+    if ([window.layer.superlayer.sublayers containsObject:textFieldLayer]) {
+        [textFieldLayer removeFromSuperlayer];
     }
 }
 
@@ -183,21 +167,12 @@ RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
 
 /** adds secure textfield view */
 RCT_EXPORT_METHOD(enableSecureView: (NSString *)imagePath) {
-    if(secureField.secureTextEntry == false) {
-        UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-        for(UIView *subview in view.subviews) {
-            [self addSecureTextFieldToView:subview :imagePath];
-        }
-    }
+    [self addSecureView];
 }
 
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
-    secureField.secureTextEntry = false;
-    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-    for(UIView *subview in view.subviews) {
-        [self removeSecureTextFieldFromView:subview];
-    }
+    [self removeSecureView];
 }
 
 
