@@ -127,6 +127,7 @@ CGSize CGSizeAspectFill(const CGSize aspectRatio, const CGSize minimumSize)
             [self initTextField];
         }
         [secureField setSecureTextEntry: TRUE];
+        [secureField setBackgroundColor: UIColor.whiteColor];
     }
 }
 
