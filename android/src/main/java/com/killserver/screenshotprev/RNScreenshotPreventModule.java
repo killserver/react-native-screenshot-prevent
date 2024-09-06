@@ -124,7 +124,7 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule implem
 
   @Override
   public void onHostResume() {
-    Activity currentActivity = this.reactContext.getCurrentActivity();
+    final Activity currentActivity = this.reactContext.getCurrentActivity();
     if (currentActivity != null && overlayLayout != null) {
       currentActivity.runOnUiThread(new Runnable() {
         @Override
@@ -142,7 +142,7 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule implem
 
   @Override
   public void onHostPause() {
-    Activity currentActivity = this.reactContext.getCurrentActivity();
+    final Activity currentActivity = this.reactContext.getCurrentActivity();
     if (currentActivity != null && overlayLayout != null) {
       currentActivity.runOnUiThread(new Runnable() {
         @Override
