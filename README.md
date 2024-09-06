@@ -68,7 +68,7 @@ if(!__DEV__) RNScreenshotPrevent.enableSecureView();
  * creates a hidden secureTextField which prevents Application UI capture on screenshots
  * and uses imgUri as the source of the background image (can be both https://, file:///)
  */
-if(!__DEV__) RNPreventScreenshot.enableSecureView(imgUri);
+if(!__DEV__) RNScreenshotPrevent.enableSecureView(imgUri);
 
 /* (IOS) disableSecureView for IOS13+ 
  * remove a hidden secureTextField which prevents Application UI capture on screenshots
