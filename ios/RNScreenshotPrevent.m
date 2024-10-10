@@ -183,6 +183,7 @@ RCT_EXPORT_METHOD(enabled:(BOOL) _enable) {
 
 /** adds secure textfield view */
 RCT_EXPORT_METHOD(enableSecureView: (NSString *)imagePath) {
+    [self enabled:YES];
     if(secureField.secureTextEntry == false) {
         UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         for(UIView *subview in view.subviews) {
@@ -193,6 +194,7 @@ RCT_EXPORT_METHOD(enableSecureView: (NSString *)imagePath) {
 
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
+    [self enabled:NO];
     secureField.secureTextEntry = false;
     UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
     for(UIView *subview in view.subviews) {
