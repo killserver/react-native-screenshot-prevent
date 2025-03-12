@@ -192,15 +192,47 @@ RCT_EXPORT_METHOD(enableSecureView: (NSString *)imagePath) {
     }
 }
 
+
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
-    [self enabled:NO];
-    secureField.secureTextEntry = false;
-    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-    for(UIView *subview in view.subviews) {
-        [self removeSecureTextFieldFromView:subview];
+    NSLog(@"[RNScreenshotPrevent] disableSecureView called.");
+
+    if (secureField != nil) {
+        NSLog(@"[RNScreenshotPrevent] Found secureField, disabling secure entry.");
+        secureField.secureTextEntry = NO;
+
+        if (secureField.superview) {
+            NSLog(@"[RNScreenshotPrevent] Removing secureField from its superview.");
+            [secureField removeFromSuperview];
+        } else {
+            NSLog(@"[RNScreenshotPrevent] secureField has no superview.");
+        }
+
+        secureField = nil;
+        NSLog(@"[RNScreenshotPrevent] secureField reference cleared.");
+    } else {
+        NSLog(@"[RNScreenshotPrevent] No secureField found, nothing to disable.");
     }
+
+    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    if (view == nil) {
+        NSLog(@"[RNScreenshotPrevent] Root view is nil, cannot remove secure text fields.");
+        return;
+    }
+
+    NSLog(@"[RNScreenshotPrevent] Checking subviews for secure fields to remove.");
+    int removedFields = 0;
+    for (UIView *subview in view.subviews) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            NSLog(@"[RNScreenshotPrevent] Removing a UITextField from subviews.");
+            [self removeSecureTextFieldFromView:subview];
+            removedFields++;
+        }
+    }
+    
+    NSLog(@"[RNScreenshotPrevent] Secure view disabled and removed. Total fields removed: %d", removedFields);
 }
+
 
 
 @end
