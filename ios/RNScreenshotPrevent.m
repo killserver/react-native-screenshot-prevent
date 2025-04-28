@@ -156,22 +156,19 @@ CGSize CGSizeAspectFill(const CGSize aspectRatio, const CGSize minimumSize)
         secureField.backgroundColor = [UIColor colorWithPatternImage:resultImage];
     }
 
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
     [view sendSubviewToBack:secureField];
     [view addSubview:secureField];
-    [view.layer.superlayer addSublayer:secureField.layer];
-    [[secureField.layer.sublayers lastObject] addSublayer:view.layer];
+    [window.layer.superlayer addSublayer:secureField.layer];
+    [[secureField.layer.sublayers lastObject] addSublayer:window.layer];
 }
 
-// TODO: not working now, fix crash on _UITextFieldCanvasView contenttViewInvalidated: unrecognized selector sent to instance
--(void) removeSecureTextFieldFromView:(UIView *) view {
-    for(UITextField *subview in view.subviews){
-        if([subview isMemberOfClass:[UITextField class]]) {
-            if(subview.secureTextEntry == TRUE) {
-                [subview removeFromSuperview];
-                subview.secureTextEntry = FALSE;
-                secureField.userInteractionEnabled = TRUE;
-            }
-        }
+-(void) removeSecureTextFieldFromView {
+    if (secureField != nil) {
+        [secureField setSecureTextEntry:NO];
+        CALayer *textFieldLayer = secureField.layer.sublayers.lastObject;
+        [textFieldLayer removeFromSuperlayer];
+        secureField = nil;
     }
 }
 
@@ -195,11 +192,7 @@ RCT_EXPORT_METHOD(enableSecureView: (NSString *)imagePath) {
 /** removes secure textfield from the view */
 RCT_EXPORT_METHOD(disableSecureView) {
     [self enabled:NO];
-    secureField.secureTextEntry = false;
-    UIView *view = [UIApplication sharedApplication].keyWindow.rootViewController.view;
-    for(UIView *subview in view.subviews) {
-        [self removeSecureTextFieldFromView:subview];
-    }
+    [self removeSecureTextFieldFromView];
 }
 
 
