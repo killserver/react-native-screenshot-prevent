@@ -9,7 +9,15 @@
 #import <React/RCTEventEmitter.h>
 #endif
 
-@interface RNScreenshotPrevent : RCTEventEmitter <RCTBridgeModule>
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <RNScreenshotPreventSpec/RNScreenshotPreventSpec.h>
+#endif
+
+@interface RNScreenshotPrevent : RCTEventEmitter <RCTBridgeModule
+#ifdef RCT_NEW_ARCH_ENABLED
+                                                  ,
+                                                  NativeRNScreenshotPreventSpec
+#endif
+                                                  >
 
 @end
-  

@@ -5,7 +5,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.annotations.ReactModule;
 
 @ReactModule(name = ScreenshotPreventModule.NAME)
-public class ScreenshotPreventModule extends NativeScreenshotPreventSpec {
+public class ScreenshotPreventModule extends NativeRNScreenshotPreventSpec {
 
     public static final String NAME = "RNScreenshotPrevent";
 
