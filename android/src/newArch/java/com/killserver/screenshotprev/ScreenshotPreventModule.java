@@ -21,17 +21,17 @@ public class ScreenshotPreventModule extends NativeRNScreenshotPreventSpec {
 
     @Override
     public void enabled(boolean enable) {
-        RNScreenshotPreventModule.enabled(enable, getReactApplicationContext());
+        ScreenshotPreventImpl.enabled(enable, getReactApplicationContext());
     }
 
     @Override
     public void enableSecureView(String imagePath) {
-        RNScreenshotPreventModule.enableSecureView(imagePath, getReactApplicationContext());
+        ScreenshotPreventImpl.enableSecureView(imagePath, getReactApplicationContext());
     }
 
     @Override
     public void disableSecureView() {
-        RNScreenshotPreventModule.disableSecureView(getReactApplicationContext());
+        ScreenshotPreventImpl.disableSecureView(getReactApplicationContext());
     }
 
     @Override
