@@ -17,7 +17,7 @@ public class RNScreenshotPreventModule extends ReactContextBaseJavaModule implem
 
   @Override
   public String getName() {
-    return "RNScreenshotPrevent";
+    return ScreenshotPreventImpl.NAME;
   }
 
   @ReactMethod

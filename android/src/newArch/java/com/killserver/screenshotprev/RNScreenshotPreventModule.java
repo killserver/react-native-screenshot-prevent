@@ -4,19 +4,16 @@ import androidx.annotation.NonNull;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.annotations.ReactModule;
 
-@ReactModule(name = ScreenshotPreventModule.NAME)
-public class ScreenshotPreventModule extends NativeRNScreenshotPreventSpec {
-
-    public static final String NAME = "RNScreenshotPrevent";
-
-    public ScreenshotPreventModule(ReactApplicationContext reactContext) {
+@ReactModule(name = ScreenshotPreventImpl.NAME)
+public class RNScreenshotPreventModule extends NativeRNScreenshotPreventSpec {
+    public RNScreenshotPreventModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     @Override
     @NonNull
     public String getName() {
-        return NAME;
+        return ScreenshotPreventImpl.NAME;
     }
 
     @Override

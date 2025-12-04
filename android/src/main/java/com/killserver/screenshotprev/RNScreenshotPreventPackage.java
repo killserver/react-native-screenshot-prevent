@@ -15,13 +15,10 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ScreenshotPreventTurboPackage extends TurboReactPackage {
-
-    @Nullable
-    @Override
+public class RNScreenshotPreventPackage extends TurboReactPackage {
     public NativeModule getModule(String name, @Nonnull ReactApplicationContext reactContext) {
-        if (name.equals(ScreenshotPreventModule.NAME)) {
-            return new ScreenshotPreventModule(reactContext);
+        if (name.equals(ScreenshotPreventImpl.NAME)) {
+            return new RNScreenshotPreventModule(reactContext);
         } else {
             return null;
         }
@@ -33,10 +30,10 @@ public class ScreenshotPreventTurboPackage extends TurboReactPackage {
             final Map<String, ReactModuleInfo> moduleInfos = new HashMap<>();
             boolean isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
             moduleInfos.put(
-                    ScreenshotPreventModule.NAME,
+                    ScreenshotPreventImpl.NAME,
                     new ReactModuleInfo(
-                            ScreenshotPreventModule.NAME,
-                            ScreenshotPreventModule.class.getName(),
+                            ScreenshotPreventImpl.NAME,
+                            ScreenshotPreventImpl.NAME,
                             false, // canOverrideExistingModule
                             false, // needsEagerInit
                             true, // hasConstants

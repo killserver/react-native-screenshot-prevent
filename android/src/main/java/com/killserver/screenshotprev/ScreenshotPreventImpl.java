@@ -20,6 +20,7 @@ import java.net.URL;
  */
 public class ScreenshotPreventImpl {
 
+  public static final String NAME = "RNScreenshotPrevent";
   private static RelativeLayout overlayLayout;
   private static boolean secureFlagWasSet;
 
