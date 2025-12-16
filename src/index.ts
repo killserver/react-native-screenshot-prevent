@@ -6,40 +6,44 @@ type FN = (resp: any) => void;
 type Return = {
 	readonly remove: () => void;
 };
-let addListen: any, RNScreenshotPrevent: any;
+
+let addListen: any;
+let RNScreenshotPrevent: any = null;
+
 if (Platform.OS !== 'web') {
 	// Try to use TurboModule first, fallback to legacy bridge
-	const RNScreenshotPreventNative =
+	const nativeModule =
 		NativeScreenshotPrevent ?? NativeModules.RNScreenshotPrevent;
-	RNScreenshotPrevent = {
-		...RNScreenshotPreventNative,
-		enableSecureView: function enableSecureView(imagePath: string = '') {
-			RNScreenshotPreventNative.enableSecureView(imagePath);
-		},
-	};
-	const eventEmitter = new NativeEventEmitter(RNScreenshotPreventNative);
 
-	/**
-	 * subscribes to userDidTakeScreenshot event
-	 * @param {function} callback handler
-	 * @returns {function} unsubscribe fn
-	 */
-	addListen = (fn: FN): Return => {
-		if (typeof fn !== 'function') {
-			console.error(
-				'RNScreenshotPrevent: addListener requires valid callback function'
-			);
-			return {
-				remove: (): void => {
-					console.error(
-						'RNScreenshotPrevent: remove not work because addListener requires valid callback function'
-					);
-				},
-			};
-		}
+	if (nativeModule) {
+		RNScreenshotPrevent = nativeModule;
+		const eventEmitter = new NativeEventEmitter(nativeModule);
 
-		return eventEmitter.addListener('userDidTakeScreenshot', fn);
-	};
+		addListen = (fn: FN): Return => {
+			if (typeof fn !== 'function') {
+				console.error(
+					'RNScreenshotPrevent: addListener requires valid callback function'
+				);
+				return {
+					remove: (): void => {
+						console.error(
+							'RNScreenshotPrevent: remove not work because addListener requires valid callback function'
+						);
+					},
+				};
+			}
+
+			return eventEmitter.addListener('userDidTakeScreenshot', fn);
+		};
+	} else {
+		console.warn('RNScreenshotPrevent: Native module not found');
+		RNScreenshotPrevent = {
+			enabled: () => {},
+			enableSecureView: () => {},
+			disableSecureView: () => {},
+		};
+		addListen = () => ({ remove: () => {} });
+	}
 } else {
 	RNScreenshotPrevent = {
 		enabled: (enabled: boolean): void => {
@@ -86,27 +90,32 @@ if (Platform.OS !== 'web') {
 
 export const usePreventScreenshot = () => {
 	useEffect(() => {
-		RNScreenshotPrevent.enabled(true);
+		RNScreenshotPrevent?.enabled(true);
 		return () => {
-			RNScreenshotPrevent.enabled(false);
+			RNScreenshotPrevent?.enabled(false);
 		};
 	}, []);
 };
 
 export const useDisableSecureView = (imagePath: string = '') => {
 	useEffect(() => {
-		RNScreenshotPrevent.enableSecureView(imagePath);
+		RNScreenshotPrevent?.enableSecureView(imagePath);
 		return () => {
-			RNScreenshotPrevent.disableSecureView();
+			RNScreenshotPrevent?.disableSecureView();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 };
 
-export const enabled: (enabled: boolean) => void = RNScreenshotPrevent.enabled;
-export const enableSecureView: (imagePath?: string) => void =
-	RNScreenshotPrevent.enableSecureView;
-export const disableSecureView: () => void =
-	RNScreenshotPrevent.disableSecureView;
-export const addListener: (fn: FN) => void = addListen;
+export const enabled: (enabled: boolean) => void = (enable) =>
+	RNScreenshotPrevent?.enabled(enable);
+
+export const enableSecureView: (imagePath?: string) => void = (imagePath) =>
+	RNScreenshotPrevent?.enableSecureView(imagePath ?? '');
+
+export const disableSecureView: () => void = () =>
+	RNScreenshotPrevent?.disableSecureView();
+
+export const addListener: (fn: FN) => Return = addListen;
+
 export default RNScreenshotPrevent;
