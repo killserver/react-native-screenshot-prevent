@@ -127,6 +127,12 @@
   "codegenConfig": {
     "name": "RNScreenshotPreventSpec",
     "type": "modules",
-    "jsSrcsDir": "src"
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.killserver.screenshotprev"
+    },
+    "ios": {  
+      "libraryName": "RNScreenshotPrevent"
+    }
   }
 }

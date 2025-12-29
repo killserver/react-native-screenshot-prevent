@@ -1,6 +1,12 @@
 #import "RNScreenshotPrevent.h"
 #import "UIImage+ImageEffects.h"
 
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <React/RCTConvert.h>
+#import <React/RCTLog.h>
+#import <React/RCTUtils.h>
+#endif
+
 @implementation RNScreenshotPrevent {
     BOOL hasListeners;
     BOOL enabled;
@@ -202,5 +208,12 @@ RCT_EXPORT_METHOD(disableSecureView) {
     }
 }
 
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeRNScreenshotPreventSpecJSI>(params);
+}
+#endif
 
 @end

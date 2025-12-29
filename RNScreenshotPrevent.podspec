@@ -10,16 +10,29 @@ Pod::Spec.new do |s|
   s.license      = package['license']
   s.authors      = package['author']
   s.homepage     = package['homepage']
-  # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "11.0"
   s.source       = { :git => "https://github.com/killserver/react-native-screenshot-prevent.git", :tag => "master" }
-  s.source_files  = "ios/**/*.{h,m}"
+  s.source_files  = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
 
+  install_modules_dependencies(s)
 
-  s.dependency "React"
-  #s.dependency "others"
+  # Enable codegen for this library
+  if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
+    s.compiler_flags = "-DRCT_NEW_ARCH_ENABLED=1"
+    s.pod_target_xcconfig = {
+      "HEADER_SEARCH_PATHS" => '"$(PODS_ROOT)/boost"',
+      "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+    }
 
+    s.dependency "React-Codegen"
+    s.dependency "RCT-Folly"
+    s.dependency "RCTRequired"
+    s.dependency "RCTTypeSafety"
+    s.dependency "ReactCommon/turbomodule/core"
+  else
+    s.dependency "React-Core"
+  end
 end
 
   
