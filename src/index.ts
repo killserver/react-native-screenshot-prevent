@@ -16,7 +16,12 @@ if (Platform.OS !== 'web') {
 		NativeScreenshotPrevent ?? NativeModules.RNScreenshotPrevent;
 
 	if (nativeModule) {
-		RNScreenshotPrevent = nativeModule;
+		RNScreenshotPrevent = {
+			...nativeModule,
+			enableSecureView: (imagePath: string = ''): void => {
+				nativeModule.enableSecureView(imagePath);
+			},
+		};
 		const eventEmitter = new NativeEventEmitter(nativeModule);
 
 		addListen = (fn: FN): Return => {
